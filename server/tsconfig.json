@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "target": "ES2020",
+      "module": "commonjs",
+      "lib": ["ES2020"],
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "skipLibCheck": true,
+      "strict": false,
+      "resolveJsonModule": true,
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "types": ["node"],
+      "forceConsistentCasingInFileNames": true,
+      "baseUrl": "./src"
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"],
+    "ts-node": {
+      "esm": false,
+      "transpileOnly": true,
+      "compilerOptions": {
+        "module": "commonjs"
+      }
+    }
+  }
