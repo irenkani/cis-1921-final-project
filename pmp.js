@@ -258,6 +258,18 @@ function App() {
 
     const submitToDatabase = async () => {
         try {
+            // Helper function to expand "no preference" selections
+            const expandNoPreference = (answerArray, questionId) => {
+                if (!Array.isArray(answerArray)) return answerArray;
+                
+                // Question 9: preferred race/ethnicity - if 7 (NO PREFERENCE) is selected, replace with all options
+                if (questionId === 9 && answerArray.includes(7)) {
+                    return [0, 1, 2, 3, 4, 5, 6, 7];
+                }
+                
+                return answerArray;
+            };
+            
             const submissionData = {
                 name: answers[1],
                 penn_email: answers[2],
@@ -267,7 +279,7 @@ function App() {
                 year_at_penn: answers[6],
                 preferred_match_years: Array.isArray(answers[7]) ? answers[7].join(',') : answers[7],
                 race_ethnicity: Array.isArray(answers[8]) ? answers[8].join(',') : answers[8],
-                preferred_match_race_ethnicity: Array.isArray(answers[9]) ? answers[9].join(',') : answers[9],
+                preferred_match_race_ethnicity: Array.isArray(answers[9]) ? expandNoPreference(answers[9], 9).join(',') : answers[9],
                 social_events_enjoyment: answers[10],
                 communication_preference: answers[11],
                 planning_style: answers[12],
