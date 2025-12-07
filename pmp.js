@@ -188,6 +188,93 @@ const questions = [
                 { label: "9", value: 9 },
                 { label: "10", value: 10 }
             ]
+        },
+        {
+            id: 15,
+            text: "You spot your match walking down Locust Walk. What do you do?",
+            type: "multiple-choice",
+            options: [
+                { label: "Wave enthusiastically and stop to talk", value: 0 },
+                { label: "Panic, put AirPods in, pretend not to see", value: 1 },
+                { label: "Cross to the other side of Locust like it's a one-way street", value: 2 },
+                { label: "Send a \"lol just saw you on Locust\" text 3 hours later", value: 3 },
+                { label: "Text your friend group first", value: 4 }
+            ]
+        },
+        {
+            id: 16,
+            text: "Open to polygamy?",
+            type: "multiple-choice",
+            options: [
+                { label: "Yes ;)", value: 0 },
+                { label: "No", value: 1 }
+            ]
+        },
+        {
+            id: 17,
+            text: "What's your love language? (Select all that apply)",
+            type: "multi-select",
+            options: [
+                { label: "Acts of service", value: 0 },
+                { label: "Gift giving", value: 1 },
+                { label: "Quality time", value: 2 },
+                { label: "Physical touch", value: 3 },
+                { label: "Words of affirmation", value: 4 }
+            ]
+        },
+        {
+            id: 18,
+            text: "What's your ideal type's love language? (Select all that apply)",
+            type: "multi-select",
+            options: [
+                { label: "Acts of service", value: 0 },
+                { label: "Gift giving", value: 1 },
+                { label: "Quality time", value: 2 },
+                { label: "Physical touch", value: 3 },
+                { label: "Words of affirmation", value: 4 }
+            ]
+        },
+        {
+            id: 19,
+            text: "What's your dominant love language at Penn?",
+            type: "multiple-choice",
+            options: [
+                { label: "Walking them back from DRL after 11pm", value: 0 },
+                { label: "Sending them your pset solutions (occasionally)", value: 1 },
+                { label: "Saving them a seat in lecture", value: 2 },
+                { label: "Grabbing Wawa for them at 1:30am", value: 3 },
+                { label: "Adding them as \"+1\" to every free-food event", value: 4 }
+            ]
+        },
+        {
+            id: 20,
+            text: "Emotionally available?",
+            type: "multiple-choice",
+            options: [
+                { label: "Fully available, healed, and ready", value: 0 },
+                { label: "Emotionally available, time unavailable", value: 1 },
+                { label: "Emotionally unavailable, time very available", value: 2 },
+                { label: "\"It's complicated\" (with my coursework)", value: 3 }
+            ]
+        },
+        {
+            id: 21,
+            text: "How do you usually text in a talking stage?",
+            type: "multiple-choice",
+            options: [
+                { label: "Instant replies (under 5 min, always)", value: 0 },
+                { label: "Reply within a few hours, consistently", value: 1 },
+                { label: "\"Sorry just saw this\" every 2–3 days", value: 2 },
+                { label: "I forget to reply and then send a paragraph apology", value: 3 },
+                { label: "I'd rather call than text", value: 4 },
+                { label: "Sending random Tiktoks or Reels or GIFs", value: 5 }
+            ]
+        },
+        {
+            id: 22,
+            text: "Upload a link to your Spotify wrapped that would help us (or your match!) to get to know you better:",
+            type: "text",
+            placeholder: "Paste your Spotify wrapped link here (optional)"
         }
     ];
 
@@ -231,8 +318,8 @@ function App() {
         // Validate email if on question 2
         if (questions[currentQuestion].id === 2) {
             const email = answers[2];
-            if (!email || !email.endsWith("@upenn.edu")) {
-                setEmailError("Please enter a valid Penn email ending in @upenn.edu");
+            if (!email || !email.endsWith("upenn.edu")) {
+                setEmailError("Please enter a valid Penn email ending in upenn.edu");
                 return;
             }
             setEmailError("");
@@ -284,7 +371,15 @@ function App() {
                 communication_preference: answers[11],
                 planning_style: answers[12],
                 relationship_importance: answers[13],
-                physical_attraction_priority: answers[14]
+                physical_attraction_priority: answers[14],
+                locust_walk_reaction: answers[15],
+                open_to_polygamy: answers[16],
+                love_language: Array.isArray(answers[17]) ? answers[17].join(',') : answers[17],
+                ideal_love_language: Array.isArray(answers[18]) ? answers[18].join(',') : answers[18],
+                penn_love_language: answers[19],
+                emotionally_available: answers[20],
+                texting_style: answers[21],
+                spotify_wrapped_link: answers[22] || ""
             };
 
             const response = await fetch('http://localhost:3000/api/submissions', {

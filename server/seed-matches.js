@@ -19,6 +19,14 @@ const SubmissionSchema = new mongoose.Schema({
   planning_style: Number,
   relationship_importance: Number,
   physical_attraction_priority: Number,
+  locust_walk_reaction: Number,
+  open_to_polygamy: Number,
+  love_language: String,
+  ideal_love_language: String,
+  penn_love_language: Number,
+  emotionally_available: Number,
+  texting_style: Number,
+  spotify_wrapped_link: String,
 });
 
 const Submission = mongoose.model('Submission', SubmissionSchema);
@@ -41,7 +49,15 @@ const testUsers = [
     communication_preference: 9,
     planning_style: 7,
     relationship_importance: 9,
-    physical_attraction_priority: 7
+    physical_attraction_priority: 7,
+    locust_walk_reaction: 0,  // Wave enthusiastically
+    open_to_polygamy: 1,      // No
+    love_language: "2,3",     // Quality time, Physical touch
+    ideal_love_language: "2,3,4",  // Quality time, Physical touch, Words of affirmation
+    penn_love_language: 0,    // Walking them back from DRL
+    emotionally_available: 0, // Fully available
+    texting_style: 1,         // Reply within a few hours
+    spotify_wrapped_link: ""
   },
   {
     name: "Jake Martinez",
@@ -57,7 +73,15 @@ const testUsers = [
     communication_preference: 9,
     planning_style: 7,
     relationship_importance: 9,
-    physical_attraction_priority: 7
+    physical_attraction_priority: 7,
+    locust_walk_reaction: 0,  // Wave enthusiastically
+    open_to_polygamy: 1,      // No
+    love_language: "2,3,4",   // Quality time, Physical touch, Words
+    ideal_love_language: "2,3",  // Quality time, Physical touch
+    penn_love_language: 0,    // Walking them back from DRL
+    emotionally_available: 0, // Fully available
+    texting_style: 1,         // Reply within a few hours
+    spotify_wrapped_link: ""
   },
   {
     name: "Sophie Chen",
@@ -73,7 +97,15 @@ const testUsers = [
     communication_preference: 8,
     planning_style: 9,
     relationship_importance: 10,
-    physical_attraction_priority: 8
+    physical_attraction_priority: 8,
+    locust_walk_reaction: 1,  // Panic, put AirPods in
+    open_to_polygamy: 1,      // No
+    love_language: "0,2",     // Acts of service, Quality time
+    ideal_love_language: "0,2,4",  // Acts of service, Quality time, Words
+    penn_love_language: 2,    // Saving them a seat in lecture
+    emotionally_available: 1, // Emotionally available, time unavailable
+    texting_style: 2,         // "Sorry just saw this" every 2-3 days
+    spotify_wrapped_link: ""
   },
   {
     name: "Ryan Thompson",
@@ -89,7 +121,15 @@ const testUsers = [
     communication_preference: 8,
     planning_style: 9,
     relationship_importance: 10,
-    physical_attraction_priority: 8
+    physical_attraction_priority: 8,
+    locust_walk_reaction: 3,  // Send a text 3 hours later
+    open_to_polygamy: 1,      // No
+    love_language: "0,2,4",   // Acts of service, Quality time, Words
+    ideal_love_language: "0,2",  // Acts of service, Quality time
+    penn_love_language: 2,    // Saving them a seat in lecture
+    emotionally_available: 1, // Emotionally available, time unavailable
+    texting_style: 1,         // Reply within a few hours
+    spotify_wrapped_link: ""
   }
 ];
 

@@ -15,6 +15,14 @@ export interface ISubmission extends Document {
   planning_style: number;
   relationship_importance: number;
   physical_attraction_priority: number;
+  locust_walk_reaction: number;
+  open_to_polygamy: number;
+  love_language: string;
+  ideal_love_language: string;
+  penn_love_language: number;
+  emotionally_available: number;
+  texting_style: number;
+  spotify_wrapped_link: string;
 }
 
 const SubmissionSchema: Schema = new Schema({
@@ -32,6 +40,14 @@ const SubmissionSchema: Schema = new Schema({
   planning_style: Number,
   relationship_importance: Number,
   physical_attraction_priority: Number,
+  locust_walk_reaction: Number,
+  open_to_polygamy: Number,
+  love_language: String,
+  ideal_love_language: String,
+  penn_love_language: Number,
+  emotionally_available: Number,
+  texting_style: Number,
+  spotify_wrapped_link: String,
 });
 
 const Submission = mongoose.model<ISubmission>("Submission", SubmissionSchema);
