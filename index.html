@@ -5,21 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Penn Marriage Pact 💕</title>
     
-    <!-- Google Font -->
+    <!-- Google Font: Gaegu (handwritten style font) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- CSS -->
+    <!-- Custom CSS styles -->
     <link rel="stylesheet" href="style.css">
     
-    <!-- React and Babel -->
+    <!-- 
+        React and Babel for JSX transpilation
+        Using CDN versions to avoid build step
+        - React 18 for component rendering
+        - Babel Standalone for in-browser JSX transformation
+    -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
+    <!-- Root div where React app will be mounted -->
     <div id="root"></div>
+    
+    <!-- 
+        Main application script
+        type="text/babel" tells Babel to transform JSX syntax
+    -->
     <script type="text/babel" src="pmp.js"></script>
 </body>
 </html>

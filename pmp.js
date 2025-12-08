@@ -1,5 +1,34 @@
+/**
+ * Penn Marriage Pact - Frontend Application
+ * 
+ * A React-based questionnaire for matching Penn students.
+ * Built using vanilla React (no JSX transpilation needed - uses Babel standalone).
+ * 
+ * Architecture:
+ * - Uses React hooks (useState) for state management
+ * - Single-page application with 3 main views: Welcome, Questions, Completion
+ * - Submits responses to backend API at http://localhost:3000
+ * 
+ * Data Flow:
+ * 1. User answers questions → stored in `answers` state object
+ * 2. On final question → submitToDatabase() sends data to API
+ * 3. On success → shows completion page
+ */
+
 const { useState } = React;
 
+/**
+ * Questions Array
+ * 
+ * Defines all 22 survey questions with their types and options.
+ * 
+ * Question Types:
+ * - "text": Free-form text input
+ * - "multiple-choice": Single selection from options
+ * - "multi-select": Multiple selections allowed (checkboxes)
+ * 
+ * Note: Question IDs map to the answers object (answers[id])
+ */
 const questions = [
         {
             id: 1,
@@ -278,13 +307,38 @@ const questions = [
         }
     ];
 
+/**
+ * Main App Component
+ * 
+ * Manages the entire questionnaire flow and state.
+ */
 function App() {
+    // ========================================
+    // State Management
+    // ========================================
+    
+    // Track which question user is currently on (0-based index)
     const [currentQuestion, setCurrentQuestion] = useState(0);
+    
+    // Store all answers in an object: { questionId: answer }
+    // For multi-select, answers are arrays; for single-choice, they're values
     const [answers, setAnswers] = useState({});
-    const [started, setStarted] = useState(false);
-    const [completed, setCompleted] = useState(false);
+    
+    // Control which page is shown
+    const [started, setStarted] = useState(false);      // true = show questions, false = show welcome
+    const [completed, setCompleted] = useState(false);  // true = show completion page
+    
+    // Email validation error message
     const [emailError, setEmailError] = useState("");
 
+    // ========================================
+    // Event Handlers
+    // ========================================
+    
+    /**
+     * Handle single-choice answer selection
+     * @param {any} answer - The selected answer value
+     */
     const handleAnswer = (answer) => {
         setAnswers(prev => ({
             ...prev,
@@ -296,6 +350,11 @@ function App() {
         }
     };
 
+    /**
+     * Handle multi-select answer (checkbox-style)
+     * Toggles the option on/off in the answer array
+     * @param {any} option - The option value to toggle
+     */
     const handleMultiSelect = (option) => {
         const currentAnswers = answers[questions[currentQuestion].id] || [];
         let newAnswers;
@@ -314,8 +373,13 @@ function App() {
         });
     };
 
+    /**
+     * Handle "Next" button click
+     * - Validates email on question 2
+     * - Moves to next question OR submits if on last question
+     */
     const handleNext = async () => {
-        // Validate email if on question 2
+        // Special validation for email question (question 2)
         if (questions[currentQuestion].id === 2) {
             const email = answers[2];
             if (!email || !email.endsWith("upenn.edu")) {
@@ -334,6 +398,10 @@ function App() {
         }
     };
 
+    /**
+     * Handle "Previous" button click
+     * Goes back to previous question, or to welcome page if on first question
+     */
     const handlePrevious = () => {
         if (currentQuestion > 0) {
             setCurrentQuestion(currentQuestion - 1);
@@ -343,9 +411,25 @@ function App() {
         }
     };
 
+    /**
+     * Submit all answers to the backend API
+     * 
+     * Process:
+     * 1. Transform answers object into the format expected by backend
+     * 2. Handle multi-select answers (convert arrays to comma-separated strings)
+     * 3. Expand "NO PREFERENCE" selections to include all options
+     * 4. Send POST request to API
+     * 5. Handle success/error responses
+     */
     const submitToDatabase = async () => {
         try {
-            // Helper function to expand "no preference" selections
+            console.log('📋 All answers:', answers);
+            
+            /**
+             * Helper function to expand "no preference" selections
+             * When user selects "NO PREFERENCE" for race/ethnicity,
+             * expand it to include all possible values for better matching
+             */
             const expandNoPreference = (answerArray, questionId) => {
                 if (!Array.isArray(answerArray)) return answerArray;
                 
@@ -357,6 +441,8 @@ function App() {
                 return answerArray;
             };
             
+            // Transform answers object into backend-compatible format
+            // Maps question IDs to field names, handles arrays vs. single values
             const submissionData = {
                 name: answers[1],
                 penn_email: answers[2],
@@ -382,6 +468,10 @@ function App() {
                 spotify_wrapped_link: answers[22] || ""
             };
 
+            console.log('📤 Sending submission data:', submissionData);
+            console.log('🌐 Fetching: http://localhost:3000/api/submissions');
+
+            // Send POST request to backend API
             const response = await fetch('http://localhost:3000/api/submissions', {
                 method: 'POST',
                 headers: {
@@ -390,18 +480,34 @@ function App() {
                 body: JSON.stringify(submissionData)
             });
 
+            console.log('📥 Response status:', response.status);
+
+            // Check if request was successful (status 200-299)
             if (!response.ok) {
-                throw new Error('Submission failed');
+                const errorText = await response.text();
+                console.error('❌ Response error:', errorText);
+                throw new Error('Submission failed: ' + response.status);
             }
 
             const result = await response.json();
             console.log('✅ Submitted successfully!', result);
         } catch (error) {
             console.error('❌ Error submitting:', error);
+            console.error('❌ Error type:', error.constructor.name);
+            console.error('❌ Error message:', error.message);
+            console.error('❌ Full error:', error);
             alert('There was an error submitting your responses. Please try again.');
         }
     };
 
+    // ========================================
+    // Page Components
+    // ========================================
+    
+    /**
+     * Welcome Page
+     * First screen users see with title and start button
+     */
     const WelcomePage = () => (
         <div className="welcome-container">
             <div className="welcome-content">
@@ -423,6 +529,10 @@ function App() {
         </div>
     );
 
+    /**
+     * Question Page
+     * Displays current question and handles different question types
+     */
     const QuestionPage = () => (
         <div className="question-container">
             <div className="progress-bar">
@@ -522,6 +632,10 @@ function App() {
         </div>
     );
 
+    /**
+     * Completion Page
+     * Success screen shown after submission
+     */
     const CompletionPage = () => (
         <div className="completion-container">
             <div className="completion-content">
@@ -544,6 +658,11 @@ function App() {
         </div>
     );
 
+    // ========================================
+    // Main Render
+    // ========================================
+    
+    // Conditionally render pages based on state
     return (
         <div className="app">
             <header className="header">
@@ -551,12 +670,13 @@ function App() {
             </header>
             
             <main className="main-content">
+                {/* Show appropriate page based on application state */}
                 {!started ? (
-                    WelcomePage()
+                    WelcomePage()           // Show welcome screen initially
                 ) : completed ? (
-                    CompletionPage()
+                    CompletionPage()        // Show completion after submission
                 ) : (
-                    QuestionPage()
+                    QuestionPage()          // Show questions during survey
                 )}
             </main>
             
@@ -567,6 +687,11 @@ function App() {
     );
 }
 
+// ========================================
+// Application Entry Point
+// ========================================
+
+// Mount React app to the DOM element with id="root"
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
 
